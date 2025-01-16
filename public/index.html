@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8866 Scouting 2025</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="PreGameSelections" class="container">
+        <h2>Pre-Game Selections</h2>
+
+        <label for="matchNumber">Match Number:</label>
+        <input type="text" id="matchNumber" maxlength="2" oninput="validateNumberInput()">
+        
+        <label for="teamNumber">Team Number:</label>
+        <input type="text" id="teamNumber" maxlength="4" oninput="validateNumberInput()">
+        
+        <label for="allianceColor">Alliance Color:</label>
+        <select id="allianceColor" onchange="validateNumberInput()">
+            <option value="" selected disabled>Select Color</option>
+            <option value="RED">RED</option>
+            <option value="BLUE">BLUE</option>
+        </select>
+
+        <label for="matchType">Match Type:</label>
+        <select id="matchType" onchange="validateNumberInput()">
+            <option value="" selected disabled>Select Match Type</option>
+            <option value="qualification">Qualification</option>
+            <option value="playoffs">Playoffs</option>
+        </select>
+
+        <button id="startScoutingButton" onclick="startGame()">Start Scouting</button>
+
+        <p id="selectionSummary"></p>
+    </div>
+
+    <div id="gameSection" class="container">
+        <h2 id="agtt">Active Game Timer</h2>
+        <h3 id="gamePhase">Game Phase</h3>
+        <p id="timer">15</p>
+        <button id="startGameButton" onclick="startTimer()">Start Game</button>
+
+        <div id="autoPhase" style="display: none;">
+            <h4>Autonomous Phase Scoring Options</h4>
+            <button onclick="updateAcl1()">Coral L1</button>
+            <button onclick="updateAcl2()">Coral L2</button>
+            <button onclick="updateAcl3()">Coral L3</button>
+            <button onclick="updateAcl4()">Coral L4</button>
+            <button onclick="updateAap()">Algae Processor</button>
+            <button onclick="updateAan()">Algae Net</button>
+            <button id="leftAutonomousButton" class="toggle-button" onclick="toggleLeftDuringAutonomous()">Left during Autonomous</button>
+            <p></p>
+        </div>
+
+        <div id="teleopPhase" style="display: none;">
+            <h4>Teleoperated Phase Scoring Options</h4>
+            <button onclick="updateTcl1()">Coral L1</button>
+            <button onclick="updateTcl2()">Coral L2</button>
+            <button onclick="updateTcl3()">Coral L3</button>
+            <button onclick="updateTcl4()">Coral L4</button>
+            <button onclick="updateTap()">Algae Processor</button>
+            <button onclick="updateTan()">Algae Net</button>
+        </div>
+
+        <div id="endGameButtons" class="endGameButtons">
+            <button id="winButton" class="toggle-button" onclick="toggleMatchResult('win')">Won Match</button>
+            <button id="lossButton" class="toggle-button" onclick="toggleMatchResult('loss')">Lost Match</button>
+            <button id="tieButton" class="toggle-button" onclick="toggleMatchResult('tie')">Tied Match</button>
+            <p> -Climb/Park Options Below- </p>
+            <button id="parkedButton" class="toggle-button" onclick="toggleEndGameResult('parked')">Parked</button>
+            <button id="deepButton" class="toggle-button" onclick="toggleEndGameResult('deep')">Deep</button>
+            <button id="shallowButton" class="toggle-button" onclick="toggleEndGameResult('shallow')">Shallow</button>
+        </div>
+
+        <div id="qrCodeButtonSection" style="display: none;">
+            <button id="generateQRCodeButton" onclick="showMatchToMaster()">Generate QR Code</button>
+        </div>
+    </div>
+
+    <script src="qrcode.min.js"></script>
+    <script src="script.js"></script>
+
+    <style>
+        .toggle-button.active {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+    </style>
+</body>
+</html>
