@@ -54,7 +54,7 @@ function startTimer() {
     document.getElementById("startGameButton").disabled = true;
     document.getElementById("startGameButton").style.display = "none";
 
-    let timeLeft = 1;
+    let timeLeft = 15;
     document.getElementById("timer").textContent = timeLeft;
     updateTimeText();
     document.getElementById("gamePhase").textContent = "Autonomous Phase";
@@ -102,7 +102,7 @@ function startIntermissionTimer() {
 }
 
 function startTeleopTimer() {
-    let timeLeft = 1;
+    let timeLeft = 135;
     document.getElementById("timer").textContent = timeLeft;
 
     clearInterval(teleopCountdown);
