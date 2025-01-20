@@ -11,11 +11,14 @@
     <div id="PreGameSelections" class="container">
         <h2>Pre-Game Selections</h2>
 
+        <label for="scouterName">Scouter Name:</label>
+        <input type="text" id="scouterName" maxlength="50" oninput="validateScouterName(); validateNumberInput()">
+
         <label for="matchNumber">Match Number:</label>
-        <input type="text" id="matchNumber" maxlength="2" oninput="validateNumberInput()">
+        <input type="text" id="matchNumber" maxlength="2" oninput="validateNumericInput(); validateNumberInput()">
         
         <label for="teamNumber">Team Number:</label>
-        <input type="text" id="teamNumber" maxlength="4" oninput="validateNumberInput()">
+        <input type="text" id="teamNumber" maxlength="4" oninput="validateNumericInput(); validateNumberInput()">
         
         <label for="allianceColor">Alliance Color:</label>
         <select id="allianceColor" onchange="validateNumberInput()">
@@ -37,31 +40,89 @@
     </div>
 
     <div id="gameSection" class="container">
-        <h2 id="agtt">Active Game Timer</h2>
-        <h3 id="gamePhase">Game Phase</h3>
+        <h2 id="agtt">Real Time Phases and Timer</h2>
+        <h3 id="gamePhase">Pre Game</h3>
         <p id="timer">15</p>
         <button id="startGameButton" onclick="startTimer()">Start Game</button>
 
         <div id="autoPhase" style="display: none;">
-            <h4>Autonomous Phase Scoring Options</h4>
-            <button onclick="updateAcl1()">Coral L1</button>
-            <button onclick="updateAcl2()">Coral L2</button>
-            <button onclick="updateAcl3()">Coral L3</button>
-            <button onclick="updateAcl4()">Coral L4</button>
-            <button onclick="updateAap()">Algae Processor</button>
-            <button onclick="updateAan()">Algae Net</button>
+            <div class="scoring-option">
+                <button onclick="updateAcl1(-3)">-</button>
+                <span id="acl1Count">0</span>
+                <button onclick="updateAcl1(3)">+</button>
+                Coral L1
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAcl2(-4)">-</button>
+                <span id="acl2Count">0</span>
+                <button onclick="updateAcl2(4)">+</button>
+                Coral L2
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAcl3(-6)">-</button>
+                <span id="acl3Count">0</span>
+                <button onclick="updateAcl3(6)">+</button>
+                Coral L3
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAcl4(-7)">-</button>
+                <span id="acl4Count">0</span>
+                <button onclick="updateAcl4(7)">+</button>
+                Coral L4
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAap(-6)">-</button>
+                <span id="aapCount">0</span>
+                <button onclick="updateAap(6)">+</button>
+                Algae Processor
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAan(-4)">-</button>
+                <span id="aanCount">0</span>
+                <button onclick="updateAan(4)">+</button>
+                Algae Net
+            </div>
             <button id="leftAutonomousButton" class="toggle-button" onclick="toggleLeftDuringAutonomous()">Left during Autonomous</button>
             <p></p>
         </div>
 
         <div id="teleopPhase" style="display: none;">
-            <h4>Teleoperated Phase Scoring Options</h4>
-            <button onclick="updateTcl1()">Coral L1</button>
-            <button onclick="updateTcl2()">Coral L2</button>
-            <button onclick="updateTcl3()">Coral L3</button>
-            <button onclick="updateTcl4()">Coral L4</button>
-            <button onclick="updateTap()">Algae Processor</button>
-            <button onclick="updateTan()">Algae Net</button>
+            <div class="scoring-option">
+                <button onclick="updateTcl1(-2)">-</button>
+                <span id="tcl1Count">0</span>
+                <button onclick="updateTcl1(2)">+</button>
+                Coral L1
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTcl2(-3)">-</button>
+                <span id="tcl2Count">0</span>
+                <button onclick="updateTcl2(3)">+</button>
+                Coral L2
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTcl3(-4)">-</button>
+                <span id="tcl3Count">0</span>
+                <button onclick="updateTcl3(4)">+</button>
+                Coral L3
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTcl4(-5)">-</button>
+                <span id="tcl4Count">0</span>
+                <button onclick="updateTcl4(5)">+</button>
+                Coral L4
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTap(-6)">-</button>
+                <span id="tapCount">0</span>
+                <button onclick="updateTap(6)">+</button>
+                Algae Processor
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTan(-4)">-</button>
+                <span id="tanCount">0</span>
+                <button onclick="updateTan(4)">+</button>
+                Algae Net
+            </div>
         </div>
 
         <div id="endGameButtons" class="endGameButtons">
@@ -77,7 +138,6 @@
         <div id="qrCodeButtonSection" style="display: none;">
             <button id="generateQRCodeButton" onclick="showMatchToMaster()">Generate QR Code</button>
         </div>
-    </div>
 
     <script src="qrcode.min.js"></script>
     <script src="script.js"></script>
