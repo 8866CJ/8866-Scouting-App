@@ -254,7 +254,9 @@ function generateQRCode() {
     let restartButton = document.createElement("button");
     restartButton.textContent = "Scout another match";
     restartButton.style.marginTop = "20px";
-    restartButton.onclick = resetToPregameSelections;
+    restartButton.onclick = function() {
+        window.location.reload(); 
+    };
 
     matchToMasterSection.appendChild(restartButton);
 }
