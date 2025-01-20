@@ -6,6 +6,44 @@ let ts = 0;
 let sn = '', tn = 0, mn = 0, ac = 0, mt = ''; 
 let countdown, intermissionCountdown, teleopCountdown;
 
+function resetToPregameSelections() {
+
+    acl1 = 0; acl2 = 0; acl3 = 0; acl4 = 0; aap = 0; aan = 0;
+    tcl1 = 0; tcl2 = 0; tcl3 = 0; tcl4 = 0; tap = 0; tan = 0;
+    egp = 0; egd = 0; egs = 0; egw = 0; egl = 0; egt = 0;
+    mn = 0; tn = 0; ac = 0; mt = 0; sn = 0;
+
+
+    document.getElementById("acl1Count").textContent = acl1 / 3;
+    document.getElementById("acl2Count").textContent = acl2 / 4;
+    document.getElementById("acl3Count").textContent = acl3 / 6;
+    document.getElementById("acl4Count").textContent = acl4 / 7;
+    document.getElementById("aapCount").textContent = aap / 6;
+    document.getElementById("aanCount").textContent = aan / 4;
+
+    document.getElementById("tcl1Count").textContent = tcl1 / 2;
+    document.getElementById("tcl2Count").textContent = tcl2 / 3;
+    document.getElementById("tcl3Count").textContent = tcl3 / 4;
+    document.getElementById("tcl4Count").textContent = tcl4 / 5;
+    document.getElementById("tapCount").textContent = tap / 6;
+    document.getElementById("tanCount").textContent = tan / 4;
+
+
+    document.getElementById("gamePhase").style.fontWeight = "normal";
+    document.getElementById("timer").style.color = "gold";
+    document.getElementById("MatchToMaster").innerHTML = "";
+    
+    document.body.style.color = "gold";
+    document.body.style.backgroundColor = "black";
+    document.getElementById("PreGameSelections").style.display = "block";
+    document.getElementById("gameSection").style.display = "none";
+    document.getElementById("endGameButtons").style.display = "none";
+    document.getElementById("qrCodeButtonSection").style.display = "none";
+    document.getElementById("timer").style.display = "block";
+    document.getElementById("agtt").textContent = "";
+}
+
+
 function validateScouterName() {
     const scouterNameInput = document.getElementById("scouterName");
     scouterNameInput.value = scouterNameInput.value.replace(/[^a-zA-Z]/g, '');
@@ -54,7 +92,7 @@ function startTimer() {
     document.getElementById("startGameButton").disabled = true;
     document.getElementById("startGameButton").style.display = "none";
 
-    let timeLeft = 15;
+    let timeLeft = 1;
     document.getElementById("timer").textContent = timeLeft;
     updateTimeText();
     document.getElementById("gamePhase").textContent = "Autonomous Phase";
@@ -102,7 +140,7 @@ function startIntermissionTimer() {
 }
 
 function startTeleopTimer() {
-    let timeLeft = 135;
+    let timeLeft = 1;
     document.getElementById("timer").textContent = timeLeft;
 
     clearInterval(teleopCountdown);
@@ -187,6 +225,13 @@ function updateScoringOptionsVisibility() {
     });
 }
 
+function resetEndGameResults() {
+    egp = 0; egd = 0; egs = 0;
+    egw = 0; egt = 0; egl = 0;
+    updateMatchResultButtons();
+    updateEndGameResultButtons();
+}
+
 function disableEndGameButtons() {
     document.getElementById("winButton").disabled = true;
     document.getElementById("lossButton").disabled = true;
@@ -243,11 +288,9 @@ function generateQRCode() {
     });
 
     let restartButton = document.createElement("button");
-    restartButton.textContent = "Restart";
+    restartButton.textContent = "Scout another match";
     restartButton.style.marginTop = "20px";
-    restartButton.onclick = function() {
-        window.location.reload(); 
-    };
+    restartButton.onclick = resetToPregameSelections;
 
     matchToMasterSection.appendChild(restartButton);
 }
