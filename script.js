@@ -4,7 +4,15 @@ let egp = 0, egd = 0, egs = 0;
 let egw = 0, egt = 0, egl = 0;
 let ts = 0;
 let sn = '', tn = 0, mn = 0, ac = 0, mt = ''; 
+let ra = 0, da = 0, cmnts = '', rp = '', gpc = '';
 let countdown, intermissionCountdown, teleopCountdown;
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("postMatchForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        submitData();
+    });
+});
 
 
 
@@ -104,7 +112,7 @@ function startIntermissionTimer() {
 }
 
 function startTeleopTimer() {
-    let timeLeft = 135;
+    let timeLeft = 25;
     document.getElementById("timer").textContent = timeLeft;
 
     clearInterval(teleopCountdown);
@@ -131,7 +139,7 @@ function startTeleopTimer() {
             document.getElementById("endGameButtons").style.display = "block"; 
             document.getElementById("timer").style.display = "none";
             document.getElementById("agtt").textContent = "Game Over";
-            document.getElementById("qrCodeButtonSection").style.display = "block";
+            document.getElementById("nextButton").style.display = "block";
         }
     }, 1000);
 }
@@ -205,6 +213,27 @@ function disableEndGameButtons() {
     document.getElementById("shallowButton").disabled = true;
 }
 
+function hideEndGame() {
+    document.getElementById("endGameButtons").style.display = "none";
+    document.getElementById("agtt").style.display = "none";
+}
+
+function goEndEndGame() {
+    hideEndGame();
+    document.getElementById("nextButton").style.display = "none";
+    document.getElementById("endEndGame").style.display = "block";
+}
+
+function submitData() {
+    ra = document.getElementById("robotAbility").value;
+    da = document.getElementById("driverSkill").value;
+    rp = document.getElementById("rolePlayed").value;
+    gpc = document.getElementById("gamepieceConsistency").value;
+    cmnts = document.getElementById("comments").value;
+
+    document.getElementById("qrCodeButtonSection").style.display = "block";
+}
+
 function showMatchToMaster() {
     document.body.style.backgroundColor = "white";
     document.body.style.color = "black";
@@ -237,10 +266,15 @@ function updateTimeText() {
     document.getElementById("timer").style.color = "gold";
 }
 
+
+
 function generateQRCode() {
-    let dataString = `${acl1},${acl2},${acl3},${acl4},${aap},${aan},${lda},` +
-                     `${tcl1},${tcl2},${tcl3},${tcl4},${tap},${tan},` +
-                     `${egp},${egd},${egs},${egw},${egl},${egt},` + `${mn},${tn},${ac},${mt},${sn}`;
+    let dataString = 
+    `${acl1},${acl2},${acl3},${acl4},${aap},${aan},${lda},` +
+    `${tcl1},${tcl2},${tcl3},${tcl4},${tap},${tan},` +
+    `${egp},${egd},${egs},${egw},${egl},${egt},` +
+    `${mn},${tn},${ac},${mt},${sn},`+
+    `${ra},${da},${gpc},${rp},${cmnts}`;
 
     let matchToMasterSection = document.getElementById("MatchToMaster");
     matchToMasterSection.innerHTML = ""; 
