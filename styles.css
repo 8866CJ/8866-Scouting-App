@@ -40,48 +40,6 @@ input, select, button {
     color: black;
     border: none;
 }
-body {
-    font-family: 'Avenir', sans-serif;
-    background-color: black;
-    color: gold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    text-align: center;
-    margin: 0;
-}
-
-body.white-bg {
-    background-color: white;
-    color: black;
-}
-
-.container {
-    width: 100%;
-    max-width: 400px;
-}
-
-input, select, button {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    font-size: 16px;
-    text-align: center;
-    box-sizing: border-box;
-    background-color: black;
-    color: gold;
-    border: 1px solid gold;
-}
-
-#startScoutingButton {
-    display: none;
-    cursor: pointer;
-    background-color: gold;
-    color: black;
-    border: none;
-}
 
 #startScoutingButton:hover {
     background-color: #d4af37;
@@ -125,44 +83,6 @@ input, select, button {
     margin: 0 5px;
 }
 
-#startScoutingButton:hover {
-    background-color: #d4af37;
-}
-
-#selectionSummary {
-    margin-top: 10px;
-    font-size: 18px;
-    display: none;
-}
-
-#gameSection {
-    display: none;
-}
-
-#timer {
-    font-size: 24px;
-    margin-top: 10px;
-    color: gold;
-}
-
-.endGameButtons {
-    display: none;
-    margin-top: 10px;
-}
-
-.toggle-button.active {
-    background-color: gold;
-    color: black;
-}
-
-.scoring-option {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px 0;
-}
-
-.scoring-option button {
-    width: auto;
-    margin: 0 5px;
+comments {
+    width: 100%;
 }
