@@ -134,9 +134,58 @@
             <button id="deepButton" class="toggle-button" onclick="toggleEndGameResult('deep')">Deep</button>
             <button id="shallowButton" class="toggle-button" onclick="toggleEndGameResult('shallow')">Shallow</button>
         </div>
+        
+        <div id="endEndGame" style="display: none;">
+            <h2>Post Match</h2>
+            <form id="postMatchForm">
+                <label for="driverSkill">Rank Driver Skill (1-5):</label>
+                <select id="driverSkill" name="driverSkill" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <label for="robotAbility">Rank Robot Ability (1-5):</label>
+                <select id="robotAbility" name="robotAbility" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <label for="gamepieceConsistency">Gamepiece Scored Most Consistently:</label>
+                <select id="gamepieceConsistency" name="gamepieceConsistency" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="Coral">Coral</option>
+                    <option value="Algae">Algae</option>
+                    <option value="Both">Both</option>
+                    <option value="None">None</option>
+                </select>
+
+                <label for="rolePlayed">Role Played:</label>
+                <select id="rolePlayed" name="rolePlayed" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="Offense">Offense</option>
+                    <option value="Defense">Defense</option>
+                </select>
+
+                <label for="comments">Additional Comments:</label>
+                <textarea id="comments" name="comments" rows="5" placeholder="Type your comments here..."></textarea>
+
+                <button type="submit" class="submit-btn">Submit Data!</button>
+            </form>
+        </div>
 
         <div id="qrCodeButtonSection" style="display: none;">
             <button id="generateQRCodeButton" onclick="showMatchToMaster()">Generate QR Code</button>
+        </div>
+        <div id="nextButton" style="display: none;">
+            <button id="endGameNext" onclick="goEndEndGame()">Next</button>
         </div>
 
     <script src="qrcode.min.js"></script>
