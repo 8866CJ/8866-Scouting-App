@@ -11,11 +11,14 @@
     <div id="PreGameSelections" class="container">
         <h2>Pre-Game Selections</h2>
 
+        <label for="scouterName">Scouter Name:</label>
+        <input type="text" id="scouterName" maxlength="50" oninput="validateScouterName(); validateNumberInput()">
+
         <label for="matchNumber">Match Number:</label>
-        <input type="text" id="matchNumber" maxlength="2" oninput="validateNumberInput()">
+        <input type="text" id="matchNumber" maxlength="2" oninput="validateNumericInput(); validateNumberInput()">
         
         <label for="teamNumber">Team Number:</label>
-        <input type="text" id="teamNumber" maxlength="4" oninput="validateNumberInput()">
+        <input type="text" id="teamNumber" maxlength="4" oninput="validateNumericInput(); validateNumberInput()">
         
         <label for="allianceColor">Alliance Color:</label>
         <select id="allianceColor" onchange="validateNumberInput()">
@@ -37,34 +40,102 @@
     </div>
 
     <div id="gameSection" class="container">
-        <h2 id="agtt">Active Game Timer</h2>
-        <h3 id="gamePhase">Game Phase</h3>
+        <h2 id="agtt">Real Time Phases and Timer</h2>
+        <h3 id="gamePhase">Pre Game</h3>
         <p id="timer">15</p>
+        
         <button id="startGameButton" onclick="startTimer()">Start Game</button>
+        
+        <button id="deadRobotButton" onclick="toggleDeadRobot()" class="toggle-button">Dead Robot</button>
+        
+        <button id="brokenRobotButton" onclick="toggleBrokenRobot()" class="toggle-button">Broken Robot</button>
+
+        <button id="resetRobotButton" onclick="resetRobotButtons()" class="toggle-button">Reset broken/dead buttons count</button>
 
         <div id="autoPhase" style="display: none;">
-            <h4>Autonomous Phase Scoring Options</h4>
-            <button onclick="updateAcl1()">Coral L1</button>
-            <button onclick="updateAcl2()">Coral L2</button>
-            <button onclick="updateAcl3()">Coral L3</button>
-            <button onclick="updateAcl4()">Coral L4</button>
-            <button onclick="updateAap()">Algae Processor</button>
-            <button onclick="updateAan()">Algae Net</button>
+            <div class="scoring-option">
+                <button onclick="updateAcl1(-3)">-</button>
+                <span id="acl1Count">0</span>
+                <button onclick="updateAcl1(3)">+</button>
+                Coral L1
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAcl2(-4)">-</button>
+                <span id="acl2Count">0</span>
+                <button onclick="updateAcl2(4)">+</button>
+                Coral L2
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAcl3(-6)">-</button>
+                <span id="acl3Count">0</span>
+                <button onclick="updateAcl3(6)">+</button>
+                Coral L3
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAcl4(-7)">-</button>
+                <span id="acl4Count">0</span>
+                <button onclick="updateAcl4(7)">+</button>
+                Coral L4
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAap(-6)">-</button>
+                <span id="aapCount">0</span>
+                <button onclick="updateAap(6)">+</button>
+                Algae Processor
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateAan(-4)">-</button>
+                <span id="aanCount">0</span>
+                <button onclick="updateAan(4)">+</button>
+                Algae Net
+            </div>
+            <button id="autonomousGamePieceMiss" onclick="missAutoPiece()">Missed Piece</button>
             <button id="leftAutonomousButton" class="toggle-button" onclick="toggleLeftDuringAutonomous()">Left during Autonomous</button>
             <p></p>
         </div>
 
         <div id="teleopPhase" style="display: none;">
-            <h4>Teleoperated Phase Scoring Options</h4>
-            <button onclick="updateTcl1()">Coral L1</button>
-            <button onclick="updateTcl2()">Coral L2</button>
-            <button onclick="updateTcl3()">Coral L3</button>
-            <button onclick="updateTcl4()">Coral L4</button>
-            <button onclick="updateTap()">Algae Processor</button>
-            <button onclick="updateTan()">Algae Net</button>
+            <div class="scoring-option">
+                <button onclick="updateTcl1(-2)">-</button>
+                <span id="tcl1Count">0</span>
+                <button onclick="updateTcl1(2)">+</button>
+                Coral L1
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTcl2(-3)">-</button>
+                <span id="tcl2Count">0</span>
+                <button onclick="updateTcl2(3)">+</button>
+                Coral L2
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTcl3(-4)">-</button>
+                <span id="tcl3Count">0</span>
+                <button onclick="updateTcl3(4)">+</button>
+                Coral L3
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTcl4(-5)">-</button>
+                <span id="tcl4Count">0</span>
+                <button onclick="updateTcl4(5)">+</button>
+                Coral L4
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTap(-6)">-</button>
+                <span id="tapCount">0</span>
+                <button onclick="updateTap(6)">+</button>
+                Algae Processor
+            </div>
+            <div class="scoring-option">
+                <button onclick="updateTan(-4)">-</button>
+                <span id="tanCount">0</span>
+                <button onclick="updateTan(4)">+</button>
+                Algae Net
+            </div>
+            <button id="teleopGamePieceMiss" onclick="missTeleopPiece()">Missed Piece</button>
         </div>
 
         <div id="endGameButtons" class="endGameButtons">
+            <p> -Match Result Options Below- </p>
             <button id="winButton" class="toggle-button" onclick="toggleMatchResult('win')">Won Match</button>
             <button id="lossButton" class="toggle-button" onclick="toggleMatchResult('loss')">Lost Match</button>
             <button id="tieButton" class="toggle-button" onclick="toggleMatchResult('tie')">Tied Match</button>
@@ -73,11 +144,62 @@
             <button id="deepButton" class="toggle-button" onclick="toggleEndGameResult('deep')">Deep</button>
             <button id="shallowButton" class="toggle-button" onclick="toggleEndGameResult('shallow')">Shallow</button>
         </div>
+        
+        <div id="endEndGame" style="display: none;">
+            <h2>Post Match</h2>
+            <form id="postMatchForm">
+                <label for="driverSkill">Rank Driver Skill (1-5):</label>
+                <select id="driverSkill" name="driverSkill" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <label for="robotAbility">Rank Robot Ability (1-5):</label>
+                <select id="robotAbility" name="robotAbility" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <label for="gamepieceConsistency">Gamepiece Scored Most Consistently:</label>
+                <select id="gamepieceConsistency" name="gamepieceConsistency" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="Coral">Coral</option>
+                    <option value="Algae">Algae</option>
+                    <option value="Both">Both</option>
+                    <option value="None">None</option>
+                </select>
+
+                <label for="rolePlayed">Role Played:</label>
+                <select id="rolePlayed" name="rolePlayed" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="Offense">Offense</option>
+                    <option value="Defense">Defense</option>
+                </select>
+
+                <label for="comments">Additional Comments:</label>
+                <textarea id="comments" name="comments" rows="5" placeholder="Type your comments here..."></textarea>
+                <p></p>
+                <label for="allianceScore">Alliance Score:</label>
+                <textarea id="allianceScore" name="allianceScore" placeholder="Type the Alliance's end score here..." oninput="validateNumericTextarea(this)"></textarea>
+
+                <button type="submit" class="submit-btn">Submit Data!</button>
+            </form>
+        </div>
 
         <div id="qrCodeButtonSection" style="display: none;">
             <button id="generateQRCodeButton" onclick="showMatchToMaster()">Generate QR Code</button>
         </div>
-    </div>
+        <div id="nextButton" style="display: none;">
+            <button id="endGameNext" onclick="goEndEndGame()">Next</button>
+        </div>
 
     <script src="qrcode.min.js"></script>
     <script src="script.js"></script>
