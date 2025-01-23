@@ -43,7 +43,14 @@
         <h2 id="agtt">Real Time Phases and Timer</h2>
         <h3 id="gamePhase">Pre Game</h3>
         <p id="timer">15</p>
+        
         <button id="startGameButton" onclick="startTimer()">Start Game</button>
+        
+        <button id="deadRobotButton" onclick="toggleDeadRobot()" class="toggle-button">Dead Robot</button>
+        
+        <button id="brokenRobotButton" onclick="toggleBrokenRobot()" class="toggle-button">Broken Robot</button>
+
+        <button id="resetRobotButton" onclick="resetRobotButtons()" class="toggle-button">Reset broken/dead buttons count</button>
 
         <div id="autoPhase" style="display: none;">
             <div class="scoring-option">
@@ -126,6 +133,7 @@
         </div>
 
         <div id="endGameButtons" class="endGameButtons">
+            <p> -Match Result Options Below- </p>
             <button id="winButton" class="toggle-button" onclick="toggleMatchResult('win')">Won Match</button>
             <button id="lossButton" class="toggle-button" onclick="toggleMatchResult('loss')">Lost Match</button>
             <button id="tieButton" class="toggle-button" onclick="toggleMatchResult('tie')">Tied Match</button>
@@ -176,6 +184,8 @@
 
                 <label for="comments">Additional Comments:</label>
                 <textarea id="comments" name="comments" rows="5" placeholder="Type your comments here..."></textarea>
+                <label for="allianceScore">Alliance Score:</label>
+                <textarea id="allianceScore" name="allianceScore" placeholder="Type the Alliance's end score here..." oninput="validateNumericTextarea(this)"></textarea>
 
                 <button type="submit" class="submit-btn">Submit Data!</button>
             </form>
