@@ -7,14 +7,40 @@ let sn = '', tn = 0, mn = 0, ac = 0, mt = '';
 let ra = 0, da = 0, cmnts = '', rp = '', gpc = '', as = '';
 let dr = 0, br = 0, drc = 0, brc = 0;
 let map = 0, mtp = 0;
+let cycleTimes = [];
+let cycleTimer;
+let cycleStartTime;
 let countdown, intermissionCountdown, teleopCountdown;
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("postMatchForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-        submitData();
-    });
+    const postMatchForm = document.getElementById("postMatchForm");
+    if (postMatchForm) {
+        postMatchForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            submitData();
+        });
+    }
+
 });
+
+function toggleCycleTimer() {
+    const button = document.getElementById('trackCycleButton');
+    button.classList.toggle('active');
+
+    if (button.classList.contains('active')) {
+        button.textContent = 'Stop Cycle Timer';
+        cycleStartTime = Date.now();
+        cycleTimer = setInterval(() => {
+        }, 1000);
+    } else {
+        button.textContent = 'Start Cycle Timer';
+        clearInterval(cycleTimer);
+        const cycleEndTime = Date.now();
+        const cycleDuration = (cycleEndTime - cycleStartTime) / 1000;
+        cycleTimes.push(cycleDuration);
+        console.log(`Cycle Times: ${cycleTimes.join('+')}`);
+    }
+}
 
 
 
@@ -63,15 +89,13 @@ function startGame() {
     document.getElementById("PreGameSelections").style.display = "none";
     document.getElementById("gameSection").style.display = "block";
     document.getElementById("startGameButton").disabled = false; 
+    document.getElementById("trackCycleButton").style.display = "none";
     document.getElementById("resetRobotButton").style.display = "none";
     document.getElementById("deadRobotButton").style.display = "none";
     document.getElementById("brokenRobotButton").style.display = "none";
 }
 
 function startTimer() {
-    document.getElementById("resetRobotButton").style.display = "block";
-    document.getElementById("deadRobotButton").style.display = "block";
-    document.getElementById("brokenRobotButton").style.display = "block";
     document.getElementById("agtt").textContent = "Active Game Timer";
     document.getElementById("startGameButton").disabled = true;
     document.getElementById("startGameButton").style.display = "none";
@@ -80,9 +104,12 @@ function startTimer() {
     document.getElementById("timer").textContent = timeLeft;
     updateTimeText();
     document.getElementById("gamePhase").textContent = "Autonomous Phase";
-
+    document.getElementById("trackCycleButton").style.display = "block";
+    document.getElementById("resetRobotButton").style.display = "block";
+    document.getElementById("deadRobotButton").style.display = "block";
+    document.getElementById("brokenRobotButton").style.display = "block";
     document.getElementById("autoPhase").style.display = "block"; 
-    updateScoringOptionsVisibility();  // Update visibility at the start of the autonomous phase
+    updateScoringOptionsVisibility(); 
 
     clearInterval(countdown);
     countdown = setInterval(() => {
@@ -143,6 +170,7 @@ function startTeleopTimer() {
 
         if (timeLeft <= 0) {
             clearInterval(teleopCountdown);
+            document.getElementById("trackCycleButton").style.display = "none";
             document.getElementById("resetRobotButton").style.display = "none";
             document.getElementById("deadRobotButton").style.display = "none";
             document.getElementById("brokenRobotButton").style.display = "none";
@@ -383,7 +411,8 @@ function generateQRCode() {
     `${mn},${tn},${ac},${mt},${sn},`+
     `${ra},${da},${gpc},${rp},${cmnts},${as},` +
     `${dr},${br},${drc},${brc},` +
-    `${map},${mtp}`;
+    `${map},${mtp},` +
+    `${cycleTimes}`;
     let matchToMasterSection = document.getElementById("MatchToMaster");
     matchToMasterSection.innerHTML = ""; 
 
