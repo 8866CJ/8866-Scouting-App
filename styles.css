@@ -11,6 +11,11 @@ body {
     margin: 0;
 }
 
+body.white-bg {
+    background-color: white;
+    color: black;
+}
+
 .container {
     width: 100%;
     max-width: 400px;
@@ -64,4 +69,20 @@ input, select, button {
 .toggle-button.active {
     background-color: gold;
     color: black;
+}
+
+.scoring-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.scoring-option button {
+    width: auto;
+    margin: 0 5px;
+}
+
+comments {
+    width: 100%;
 }
