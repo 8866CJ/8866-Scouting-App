@@ -3,10 +3,65 @@ let tcl1 = 0, tcl2 = 0, tcl3 = 0, tcl4 = 0, tap = 0, tan = 0;
 let egp = 0, egd = 0, egs = 0;
 let egw = 0, egt = 0, egl = 0;
 let ts = 0;
-let tn = 0, mn = 0, ac = 0, mt = ''; 
+let sn = '', tn = 0, mn = 0, ac = 0, mt = ''; 
+let ra = 0, da = 0, cmnts = '', rp = '', gpc = '', as = '';
+let dr = 0, br = 0, drc = 0, brc = 0;
+let map = 0, mtp = 0;
+let cycleTimes = [];
+let cycleTimer;
+let cycleStartTime;
 let countdown, intermissionCountdown, teleopCountdown;
 
+document.addEventListener("DOMContentLoaded", function() {
+    const postMatchForm = document.getElementById("postMatchForm");
+    if (postMatchForm) {
+        postMatchForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            submitData();
+        });
+    }
+
+});
+
+function toggleCycleTimer() {
+    const button = document.getElementById('trackCycleButton');
+    button.classList.toggle('active');
+
+    if (button.classList.contains('active')) {
+        button.textContent = 'Stop Cycle Timer';
+        cycleStartTime = Date.now();
+        cycleTimer = setInterval(() => {
+        }, 1000);
+    } else {
+        button.textContent = 'Start Cycle Timer';
+        clearInterval(cycleTimer);
+        const cycleEndTime = Date.now();
+        const cycleDuration = (cycleEndTime - cycleStartTime) / 1000;
+        cycleTimes.push(cycleDuration);
+        console.log(`Cycle Times: ${cycleTimes.join('+')}`);
+    }
+}
+
+
+
+function validateScouterName() {
+    const scouterNameInput = document.getElementById("scouterName");
+    scouterNameInput.value = scouterNameInput.value.replace(/[^a-zA-Z]/g, '');
+}
+
+function validateNumericInput() {
+    const matchNumberInput = document.getElementById("matchNumber");
+    const teamNumberInput = document.getElementById("teamNumber");
+    matchNumberInput.value = matchNumberInput.value.replace(/[^0-9]/g, '');
+    teamNumberInput.value = teamNumberInput.value.replace(/[^0-9]/g, '');
+}
+
+function validateNumericTextarea(textarea) {
+    textarea.value = textarea.value.replace(/[^0-9]/g, '');
+}
+
 function validateNumberInput() {
+    let scouterName = document.getElementById("scouterName").value;
     let matchNum = document.getElementById("matchNumber").value;
     let teamNum = document.getElementById("teamNumber").value;
     let allianceColor = document.getElementById("allianceColor").value;
@@ -15,10 +70,10 @@ function validateNumberInput() {
     let startScoutingButton = document.getElementById("startScoutingButton");
     let summaryText = document.getElementById("selectionSummary");
 
-    if (matchNum.length > 0 && teamNum.length > 0 && allianceColor !== "" && matchType !== "") {
+    if (scouterName.length > 0 && matchNum.length > 0 && teamNum.length > 0 && allianceColor !== "" && matchType !== "") {
         startScoutingButton.style.display = "block";
         summaryText.style.display = "block";
-        summaryText.textContent = `Selected Match: ${matchNum}; Team: ${teamNum}; Alliance: ${allianceColor}; Match Type: ${matchType.charAt(0).toUpperCase() + matchType.slice(1)}`;
+        summaryText.textContent = `Scouter: ${scouterName}; Selected Match: ${matchNum}; Team: ${teamNum}; Alliance: ${allianceColor}; Match Type: ${matchType.charAt(0).toUpperCase() + matchType.slice(1)}`;
     } else {
         startScoutingButton.style.display = "none";
         summaryText.style.display = "none";
@@ -30,22 +85,31 @@ function startGame() {
     mn = document.getElementById("matchNumber").value;
     ac = document.getElementById("allianceColor").value === "BLUE" ? 1 : 0;
     mt = document.getElementById("matchType").value;
+    sn = document.getElementById("scouterName").value;
     document.getElementById("PreGameSelections").style.display = "none";
     document.getElementById("gameSection").style.display = "block";
     document.getElementById("startGameButton").disabled = false; 
+    document.getElementById("trackCycleButton").style.display = "none";
+    document.getElementById("resetRobotButton").style.display = "none";
+    document.getElementById("deadRobotButton").style.display = "none";
+    document.getElementById("brokenRobotButton").style.display = "none";
 }
 
 function startTimer() {
+    document.getElementById("agtt").textContent = "Active Game Timer";
     document.getElementById("startGameButton").disabled = true;
     document.getElementById("startGameButton").style.display = "none";
 
     let timeLeft = 15;
     document.getElementById("timer").textContent = timeLeft;
-    document.getElementById("gamePhase").style.fontWeight = "normal"; 
-    document.getElementById("timer").style.color = "black";
+    updateTimeText();
     document.getElementById("gamePhase").textContent = "Autonomous Phase";
-
+    document.getElementById("trackCycleButton").style.display = "block";
+    document.getElementById("resetRobotButton").style.display = "block";
+    document.getElementById("deadRobotButton").style.display = "block";
+    document.getElementById("brokenRobotButton").style.display = "block";
     document.getElementById("autoPhase").style.display = "block"; 
+    updateScoringOptionsVisibility(); 
 
     clearInterval(countdown);
     countdown = setInterval(() => {
@@ -54,8 +118,7 @@ function startTimer() {
 
         if (timeLeft <= 0) {
             clearInterval(countdown);
-            document.getElementById("gamePhase").style.fontWeight = "normal"; 
-            document.getElementById("timer").style.color = "black";
+            updateTimeText();
             document.getElementById("gamePhase").textContent = "Intermission"; 
 
             document.getElementById("autoPhase").style.display = "none";
@@ -76,8 +139,7 @@ function startIntermissionTimer() {
 
         if (intermissionTimeLeft <= 0) {
             clearInterval(intermissionCountdown);
-            document.getElementById("gamePhase").style.fontWeight = "normal"; 
-            document.getElementById("timer").style.color = "black";
+            updateTimeText();
             document.getElementById("gamePhase").textContent = "Teleoperated Phase"; 
 
             document.getElementById("autoPhase").style.display = "none";
@@ -89,7 +151,7 @@ function startIntermissionTimer() {
 }
 
 function startTeleopTimer() {
-    let timeLeft = 22;
+    let timeLeft = 25;
     document.getElementById("timer").textContent = timeLeft;
 
     clearInterval(teleopCountdown);
@@ -97,10 +159,9 @@ function startTeleopTimer() {
         timeLeft--;
         document.getElementById("timer").textContent = timeLeft;
 
-        if (timeLeft > 135) {
-            document.getElementById("timer").style.color = "black"; 
+        if (timeLeft > 20) {
+            updateTimeText();
             document.getElementById("gamePhase").textContent = "Teleoperated Phase"; 
-            document.getElementById("gamePhase").style.fontWeight = "normal"; 
         } else {
             document.getElementById("timer").style.color = "red";
             document.getElementById("gamePhase").textContent = "END GAME"; 
@@ -109,6 +170,10 @@ function startTeleopTimer() {
 
         if (timeLeft <= 0) {
             clearInterval(teleopCountdown);
+            document.getElementById("trackCycleButton").style.display = "none";
+            document.getElementById("resetRobotButton").style.display = "none";
+            document.getElementById("deadRobotButton").style.display = "none";
+            document.getElementById("brokenRobotButton").style.display = "none";
             document.getElementById("gamePhase").textContent = "";
 
             document.getElementById("autoPhase").style.display = "none";
@@ -117,7 +182,7 @@ function startTeleopTimer() {
             document.getElementById("endGameButtons").style.display = "block"; 
             document.getElementById("timer").style.display = "none";
             document.getElementById("agtt").textContent = "Game Over";
-            document.getElementById("qrCodeButtonSection").style.display = "block";
+            document.getElementById("nextButton").style.display = "block";
         }
     }, 1000);
 }
@@ -165,6 +230,21 @@ function updateEndGameResultButtons() {
 function toggleLeftDuringAutonomous() {
     lda = lda === 3 ? 0 : 3;
     document.getElementById("leftAutonomousButton").classList.toggle("active", lda === 3);
+    updateScoringOptionsVisibility();
+}
+
+function updateScoringOptionsVisibility() {
+    const autoPhaseScoringOptions = document.querySelectorAll("#autoPhase .scoring-option");
+    autoPhaseScoringOptions.forEach(option => {
+        option.style.display = (document.getElementById("gamePhase").textContent === "Autonomous Phase" && lda !== 3) ? 'none' : 'flex';
+    });
+}
+
+function resetEndGameResults() {
+    egp = 0; egd = 0; egs = 0;
+    egw = 0; egt = 0; egl = 0;
+    updateMatchResultButtons();
+    updateEndGameResultButtons();
 }
 
 function disableEndGameButtons() {
@@ -176,7 +256,31 @@ function disableEndGameButtons() {
     document.getElementById("shallowButton").disabled = true;
 }
 
+function hideEndGame() {
+    document.getElementById("endGameButtons").style.display = "none";
+    document.getElementById("agtt").style.display = "none";
+}
+
+function goEndEndGame() {
+    hideEndGame();
+    document.getElementById("nextButton").style.display = "none";
+    document.getElementById("endEndGame").style.display = "block";
+}
+
+function submitData() {
+    as = document.getElementById("allianceScore").value;
+    ra = document.getElementById("robotAbility").value;
+    da = document.getElementById("driverSkill").value;
+    rp = document.getElementById("rolePlayed").value;
+    gpc = document.getElementById("gamepieceConsistency").value;
+    cmnts = document.getElementById("comments").value;
+
+    document.getElementById("qrCodeButtonSection").style.display = "block";
+}
+
 function showMatchToMaster() {
+    document.body.style.backgroundColor = "white";
+    document.body.style.color = "black";
     document.getElementById("gameSection").style.display = "none";
     document.getElementById("endGameButtons").style.display = "none";
     document.getElementById("qrCodeButtonSection").style.display = "none";
@@ -186,29 +290,131 @@ function showMatchToMaster() {
     matchToMasterSection.innerHTML = "<h2>Scan the QR code for match data</h2>"; 
     generateQRCode();
 }
+function updateAcl1(value) {
+    acl1 = Math.max(0, acl1 + value);
+    document.getElementById("acl1Count").textContent = acl1 / 3;
+}
 
-function updateAcl1() { acl1 += 3; }
-function updateAcl2() { acl2 += 4; }
-function updateAcl3() { acl3 += 6; }
-function updateAcl4() { acl4 += 7; }
-function updateAap() { aap += 6; }
-function updateAan() { aan += 4; }
-function updateLda() { lda = lda === 3 ? 0 : 3; }
+function updateAcl2(value) {
+    acl2 = Math.max(0, acl2 + value);
+    document.getElementById("acl2Count").textContent = acl2 / 4;
+}
 
-function updateTcl1() { tcl1 += 2; }
-function updateTcl2() { tcl2 += 3; }
-function updateTcl3() { tcl3 += 4; }
-function updateTcl4() { tcl4 += 5; }
-function updateTap() { tap += 6; }
-function updateTan() { tan += 4; }
+function updateAcl3(value) {
+    acl3 = Math.max(0, acl3 + value);
+    document.getElementById("acl3Count").textContent = acl3 / 6;
+}
+
+function updateAcl4(value) {
+    acl4 = Math.max(0, acl4 + value);
+    document.getElementById("acl4Count").textContent = acl4 / 7;
+}
+
+function updateAap(value) {
+    aap = Math.max(0, aap + value);
+    document.getElementById("aapCount").textContent = aap / 6;
+}
+
+function updateAan(value) {
+    aan = Math.max(0, aan + value);
+    document.getElementById("aanCount").textContent = aan / 4;
+}
+
+function updateTcl1(value) {
+    tcl1 = Math.max(0, tcl1 + value);
+    document.getElementById("tcl1Count").textContent = tcl1 / 2;
+}
+
+function updateTcl2(value) {
+    tcl2 = Math.max(0, tcl2 + value);
+    document.getElementById("tcl2Count").textContent = tcl2 / 3;
+}
+
+function updateTcl3(value) {
+    tcl3 = Math.max(0, tcl3 + value);
+    document.getElementById("tcl3Count").textContent = tcl3 / 4;
+}
+
+function updateTcl4(value) {
+    tcl4 = Math.max(0, tcl4 + value);
+    document.getElementById("tcl4Count").textContent = tcl4 / 5;
+}
+
+function updateTap(value) {
+    tap = Math.max(0, tap + value);
+    document.getElementById("tapCount").textContent = tap / 6;
+}
+
+function updateTan(value) {
+    tan = Math.max(0, tan + value);
+    document.getElementById("tanCount").textContent = tan / 4;
+}
+
+function updateTimeText() {
+    document.getElementById("gamePhase").style.fontWeight = "normal"; 
+    document.getElementById("timer").style.color = "gold";
+}
+
+function toggleDeadRobot() {
+    const drbutton = document.getElementById('deadRobotButton');
+    drbutton.classList.toggle('active');
+    drc++;
+    if (drbutton.classList.contains('active')) {
+        drbutton.textContent = 'Dead Robot (Active)';
+        dr = 1;
+    } else {
+        drbutton.textContent = 'Dead Robot';
+        dr = 0;
+    }
+}
+
+function toggleBrokenRobot() {
+    const brbutton = document.getElementById('brokenRobotButton');
+    brc++;
+    br = 1;
+    brbutton.textContent = `Broken Robot (Pressed ${brc} times)`;
+}
+
+function resetRobotButtons() {
+    const brbutton = document.getElementById('brokenRobotButton');
+    const drbutton = document.getElementById('deadRobotButton');
+    const rrbutton = document.getElementById('resetRobotButton');
+    drbutton.textContent = 'Dead Robot';
+    brbutton.textContent = `Broken Robot`;
+
+    if (drbutton.classList.contains('active')) {
+        drbutton.classList.toggle('active');
+    } else {
+        return;
+    }
+    
+    br = 0;
+    dr = 0;
+    brc = 0;
+    drc = 0;
+    rrbutton.textContent = 'Reset Counters!';
+}
+
+function missAutoPiece() {
+    map++;
+}
+
+function missTeleopPiece() {
+    mtp++;
+}
 
 function generateQRCode() {
-    let dataString = `${acl1},${acl2},${acl3},${acl4},${aap},${aan},${lda},` +
-                     `${tcl1},${tcl2},${tcl3},${tcl4},${tap},${tan},` +
-                     `${egp},${egd},${egs},` + `${egw},${egl},${egt},` + `${mn},${tn},${ac},${mt},0`;
-
+    let dataString = 
+    `${acl1},${acl2},${acl3},${acl4},${aap},${aan},${lda},` +
+    `${tcl1},${tcl2},${tcl3},${tcl4},${tap},${tan},` +
+    `${egp},${egd},${egs},${egw},${egl},${egt},` +
+    `${mn},${tn},${ac},${mt},${sn},`+
+    `${ra},${da},${gpc},${rp},${cmnts},${as},` +
+    `${dr},${br},${drc},${brc},` +
+    `${map},${mtp},` +
+    `${cycleTimes}`;
     let matchToMasterSection = document.getElementById("MatchToMaster");
-    matchToMasterSection.innerHTML = ""; // Clear previous QR code if any
+    matchToMasterSection.innerHTML = ""; 
 
     let qrCode = new QRCode(matchToMasterSection, {
         text: dataString,
@@ -216,9 +422,9 @@ function generateQRCode() {
         height: 300
     });
 
-    // Add a restart button
     let restartButton = document.createElement("button");
-    restartButton.textContent = "Restart";
+    restartButton.textContent = "Scout another match";
+    restartButton.style.marginTop = "20px";
     restartButton.onclick = function() {
         window.location.reload(); 
     };
