@@ -4,7 +4,8 @@ let egp = 0, egd = 0, egs = 0;
 let egw = 0, egt = 0, egl = 0;
 let ts = 0;
 let sn = '', tn = 0, mn = 0, ac = 0, mt = ''; 
-let ra = 0, da = 0, cmnts = '', rp = '', gpc = '';
+let ra = 0, da = 0, cmnts = '', rp = '', gpc = '', as = '';
+let dr = 0, br = 0, drc = 0, brc = 0;
 let countdown, intermissionCountdown, teleopCountdown;
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -26,6 +27,10 @@ function validateNumericInput() {
     const teamNumberInput = document.getElementById("teamNumber");
     matchNumberInput.value = matchNumberInput.value.replace(/[^0-9]/g, '');
     teamNumberInput.value = teamNumberInput.value.replace(/[^0-9]/g, '');
+}
+
+function validateNumericTextarea(textarea) {
+    textarea.value = textarea.value.replace(/[^0-9]/g, '');
 }
 
 function validateNumberInput() {
@@ -131,6 +136,9 @@ function startTeleopTimer() {
 
         if (timeLeft <= 0) {
             clearInterval(teleopCountdown);
+            document.getElementById("resetRobotButton").style.display = "none";
+            document.getElementById("deadRobotButton").style.display = "none";
+            document.getElementById("brokenRobotButton").style.display = "none";
             document.getElementById("gamePhase").textContent = "";
 
             document.getElementById("autoPhase").style.display = "none";
@@ -225,6 +233,7 @@ function goEndEndGame() {
 }
 
 function submitData() {
+    as = document.getElementById("allianceScore").value;
     ra = document.getElementById("robotAbility").value;
     da = document.getElementById("driverSkill").value;
     rp = document.getElementById("rolePlayed").value;
@@ -246,26 +255,110 @@ function showMatchToMaster() {
     matchToMasterSection.innerHTML = "<h2>Scan the QR code for match data</h2>"; 
     generateQRCode();
 }
+function updateAcl1(value) {
+    acl1 = Math.max(0, acl1 + value);
+    document.getElementById("acl1Count").textContent = acl1 / 3;
+}
 
-function updateAcl1(value) { acl1 += value; document.getElementById("acl1Count").textContent = acl1 / 3; }
-function updateAcl2(value) { acl2 += value; document.getElementById("acl2Count").textContent = acl2 / 4; }
-function updateAcl3(value) { acl3 += value; document.getElementById("acl3Count").textContent = acl3 / 6; }
-function updateAcl4(value) { acl4 += value; document.getElementById("acl4Count").textContent = acl4 / 7; }
-function updateAap(value) { aap += value; document.getElementById("aapCount").textContent = aap / 6; }
-function updateAan(value) { aan += value; document.getElementById("aanCount").textContent = aan / 4; }
+function updateAcl2(value) {
+    acl2 = Math.max(0, acl2 + value);
+    document.getElementById("acl2Count").textContent = acl2 / 4;
+}
 
-function updateTcl1(value) { tcl1 += value; document.getElementById("tcl1Count").textContent = tcl1 / 2; }
-function updateTcl2(value) { tcl2 += value; document.getElementById("tcl2Count").textContent = tcl2 / 3; }
-function updateTcl3(value) { tcl3 += value; document.getElementById("tcl3Count").textContent = tcl3 / 4; }
-function updateTcl4(value) { tcl4 += value; document.getElementById("tcl4Count").textContent = tcl4 / 5; }
-function updateTap(value) { tap += value; document.getElementById("tapCount").textContent = tap / 6; }
-function updateTan(value) { tan += value; document.getElementById("tanCount").textContent = tan / 4; }
+function updateAcl3(value) {
+    acl3 = Math.max(0, acl3 + value);
+    document.getElementById("acl3Count").textContent = acl3 / 6;
+}
+
+function updateAcl4(value) {
+    acl4 = Math.max(0, acl4 + value);
+    document.getElementById("acl4Count").textContent = acl4 / 7;
+}
+
+function updateAap(value) {
+    aap = Math.max(0, aap + value);
+    document.getElementById("aapCount").textContent = aap / 6;
+}
+
+function updateAan(value) {
+    aan = Math.max(0, aan + value);
+    document.getElementById("aanCount").textContent = aan / 4;
+}
+
+function updateTcl1(value) {
+    tcl1 = Math.max(0, tcl1 + value);
+    document.getElementById("tcl1Count").textContent = tcl1 / 2;
+}
+
+function updateTcl2(value) {
+    tcl2 = Math.max(0, tcl2 + value);
+    document.getElementById("tcl2Count").textContent = tcl2 / 3;
+}
+
+function updateTcl3(value) {
+    tcl3 = Math.max(0, tcl3 + value);
+    document.getElementById("tcl3Count").textContent = tcl3 / 4;
+}
+
+function updateTcl4(value) {
+    tcl4 = Math.max(0, tcl4 + value);
+    document.getElementById("tcl4Count").textContent = tcl4 / 5;
+}
+
+function updateTap(value) {
+    tap = Math.max(0, tap + value);
+    document.getElementById("tapCount").textContent = tap / 6;
+}
+
+function updateTan(value) {
+    tan = Math.max(0, tan + value);
+    document.getElementById("tanCount").textContent = tan / 4;
+}
 
 function updateTimeText() {
     document.getElementById("gamePhase").style.fontWeight = "normal"; 
     document.getElementById("timer").style.color = "gold";
 }
 
+function toggleDeadRobot() {
+    const drbutton = document.getElementById('deadRobotButton');
+    drbutton.classList.toggle('active');
+    drc++;
+    if (drbutton.classList.contains('active')) {
+        drbutton.textContent = 'Dead Robot (Active)';
+        dr = 1;
+    } else {
+        drbutton.textContent = 'Dead Robot';
+        dr = 0;
+    }
+}
+
+function toggleBrokenRobot() {
+    const brbutton = document.getElementById('brokenRobotButton');
+    brc++;
+    br = 1;
+    brbutton.textContent = `Broken Robot (Pressed ${brc} times)`;
+}
+
+function resetRobotButtons() {
+    const brbutton = document.getElementById('brokenRobotButton');
+    const drbutton = document.getElementById('deadRobotButton');
+    const rrbutton = document.getElementById('resetRobotButton');
+    drbutton.textContent = 'Dead Robot';
+    brbutton.textContent = `Broken Robot`;
+
+    if (drbutton.classList.contains('active')) {
+        drbutton.classList.toggle('active');
+    } else {
+        return;
+    }
+    
+    br = 0;
+    dr = 0;
+    brc = 0;
+    drc = 0;
+    rrbutton.textContent = 'Reset Counters!';
+}
 
 
 function generateQRCode() {
@@ -274,8 +367,8 @@ function generateQRCode() {
     `${tcl1},${tcl2},${tcl3},${tcl4},${tap},${tan},` +
     `${egp},${egd},${egs},${egw},${egl},${egt},` +
     `${mn},${tn},${ac},${mt},${sn},`+
-    `${ra},${da},${gpc},${rp},${cmnts}`;
-
+    `${ra},${da},${gpc},${rp},${cmnts},${as},`+
+    `${dr},${br},${drc},${brc}`;
     let matchToMasterSection = document.getElementById("MatchToMaster");
     matchToMasterSection.innerHTML = ""; 
 
