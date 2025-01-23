@@ -63,9 +63,15 @@ function startGame() {
     document.getElementById("PreGameSelections").style.display = "none";
     document.getElementById("gameSection").style.display = "block";
     document.getElementById("startGameButton").disabled = false; 
+    document.getElementById("resetRobotButton").style.display = "none";
+    document.getElementById("deadRobotButton").style.display = "none";
+    document.getElementById("brokenRobotButton").style.display = "none";
 }
 
 function startTimer() {
+    document.getElementById("resetRobotButton").style.display = "block";
+    document.getElementById("deadRobotButton").style.display = "block";
+    document.getElementById("brokenRobotButton").style.display = "block";
     document.getElementById("agtt").textContent = "Active Game Timer";
     document.getElementById("startGameButton").disabled = true;
     document.getElementById("startGameButton").style.display = "none";
