@@ -89,6 +89,7 @@
                 <button onclick="updateAan(4)">+</button>
                 Algae Net
             </div>
+            <button id="autonomousGamePieceMiss" onclick="missAutoPiece()">Missed Piece</button>
             <button id="leftAutonomousButton" class="toggle-button" onclick="toggleLeftDuringAutonomous()">Left during Autonomous</button>
             <p></p>
         </div>
@@ -130,6 +131,7 @@
                 <button onclick="updateTan(4)">+</button>
                 Algae Net
             </div>
+            <button id="teleopGamePieceMiss" onclick="missTeleopPiece()">Missed Piece</button>
         </div>
 
         <div id="endGameButtons" class="endGameButtons">
@@ -184,6 +186,7 @@
 
                 <label for="comments">Additional Comments:</label>
                 <textarea id="comments" name="comments" rows="5" placeholder="Type your comments here..."></textarea>
+                <p></p>
                 <label for="allianceScore">Alliance Score:</label>
                 <textarea id="allianceScore" name="allianceScore" placeholder="Type the Alliance's end score here..." oninput="validateNumericTextarea(this)"></textarea>
 
