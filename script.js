@@ -6,6 +6,7 @@ let ts = 0;
 let sn = '', tn = 0, mn = 0, ac = 0, mt = ''; 
 let ra = 0, da = 0, cmnts = '', rp = '', gpc = '', as = '';
 let dr = 0, br = 0, drc = 0, brc = 0;
+let map = 0, mtp = 0;
 let countdown, intermissionCountdown, teleopCountdown;
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -360,6 +361,13 @@ function resetRobotButtons() {
     rrbutton.textContent = 'Reset Counters!';
 }
 
+function missAutoPiece() {
+    map++;
+}
+
+function missTeleopPiece() {
+    mtp++;
+}
 
 function generateQRCode() {
     let dataString = 
@@ -367,8 +375,9 @@ function generateQRCode() {
     `${tcl1},${tcl2},${tcl3},${tcl4},${tap},${tan},` +
     `${egp},${egd},${egs},${egw},${egl},${egt},` +
     `${mn},${tn},${ac},${mt},${sn},`+
-    `${ra},${da},${gpc},${rp},${cmnts},${as},`+
-    `${dr},${br},${drc},${brc}`;
+    `${ra},${da},${gpc},${rp},${cmnts},${as},` +
+    `${dr},${br},${drc},${brc},` +
+    `${map},${mtp}`;
     let matchToMasterSection = document.getElementById("MatchToMaster");
     matchToMasterSection.innerHTML = ""; 
 
